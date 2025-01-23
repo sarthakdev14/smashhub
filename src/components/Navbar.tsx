@@ -12,7 +12,10 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, toggleDarkMode, currentPage, 
   return (
     <nav className={`fixed w-full z-50 p-4 ${darkMode ? 'bg-gray-800/95' : 'bg-white/95'} shadow-lg backdrop-blur-sm transition-colors duration-300`}>
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <h1 className="text-3xl font-bold transform hover:scale-105 transition-transform duration-300">
+        <h1
+          onClick={() => onNavigate('home')}
+          className="text-3xl font-bold transform hover:scale-105 transition-transform duration-300 cursor-pointer"
+        >
           SmashHub
         </h1>
         

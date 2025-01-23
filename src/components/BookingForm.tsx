@@ -25,10 +25,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, darkMode, courtId, 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     // Simulate loading state
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     const price = calculatePrice(courtId || '1', time);
     onSubmit({
       date,
@@ -38,11 +38,26 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, darkMode, courtId, 
       price,
       isPaid: false
     });
-    
+
     setDate('');
     setTime('');
     setIsLoading(false);
   };
+
+  const generateTimeSlots = () => {
+    const slots = [];
+    let currentHour = 8; // Start at 8:00 AM
+
+    while (currentHour !== 2) {
+      const hourString = currentHour < 10 ? `0${currentHour}` : `${currentHour}`;
+      slots.push(`${hourString}:00`);
+      currentHour = (currentHour + 1) % 24; // Increment and loop back after midnight
+    }
+
+    return slots;
+  };
+
+  const timeSlots = generateTimeSlots();
 
   const inputClass = `w-full p-2 rounded-lg ${
     darkMode 
@@ -82,15 +97,17 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, darkMode, courtId, 
         <label className="block mb-2 text-sm font-medium">Select Time</label>
         <div className="relative">
           <Clock className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-          <input
-            type="time"
+          <select
             required
             value={time}
             onChange={(e) => setTime(e.target.value)}
             className={`${inputClass} pl-10`}
-            min="06:00"
-            max="22:00"
-          />
+          >
+            <option value="" disabled>Select a time slot</option>
+            {timeSlots.map((slot) => (
+              <option key={slot} value={slot}>{slot}</option>
+            ))}
+          </select>
         </div>
       </div>
 
